@@ -1,24 +1,25 @@
 package com.example.demo.model;
 
-import lombok.Data;
-import lombok.NonNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Building {
   // Уникальный идентификатор постройки
-  @NonNull
-  public String id;
+  String id;
 
   // Тип собственности
-  @NonNull
   String propertyType = "private";
 
   // Улица
-  @NonNull
   String street;
 
   // Номер дома
-  @NonNull
   String number;
 
   // Дата сдачи в эксплуатацию
