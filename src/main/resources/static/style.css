@@ -1,0 +1,71 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+section {
+  padding: 0.5em;
+}
+
+button {
+  border-radius: 4px;
+  border: 1px solid rgb(187, 187, 187);
+  padding: 0.5em;
+}
+
+input {
+  margin-bottom: 0.5em;
+}
+
+input[type='text'],
+input[type='button'],
+input[type='number'],
+input[type='submit'] {
+  display: block;
+  border-radius: 4px;
+  border: 1px solid rgb(187, 187, 187);
+  padding: 0.5em;
+}
+
+.form-group {
+  width: min(768px, 100%);
+}
+
+.form-group input {
+  width: 100%;
+}
+
+input[type='number'] {
+  width: 10ch;
+}
+
+.table {
+  display: table;
+  outline: 1px solid grey;
+}
+
+.table-head {
+  font-weight: 600;
+}
+
+.table-row,
+.table-head {
+  display: table-row;
+}
+
+.table-row:nth-child(2n-1) {
+  background-color: rgb(245, 245, 245);
+}
+
+.table-row div,
+.table-head div {
+  display: table-cell;
+  outline: 0.5px solid grey;
+  padding: 0.3em;
+}
+
+.table-row div button {
+  min-width: 2em;
+  min-height: 2em;
+}

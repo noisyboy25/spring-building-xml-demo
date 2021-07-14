@@ -25,12 +25,9 @@ public class BackupController {
 
   @PostMapping("/api/backup")
   public void fileUpload(@RequestParam("file") MultipartFile file, HttpServletResponse response) throws IOException {
-    if (file.isEmpty()) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Cannot save file");
-      return;
+    if (!file.isEmpty()) {
+      Files.copy(file.getInputStream(), dbFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
-
-    Files.copy(file.getInputStream(), dbFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
     response.sendRedirect("/");
   }

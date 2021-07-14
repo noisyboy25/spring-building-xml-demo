@@ -5,109 +5,71 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <style>
-      * {
-        font-family: sans-serif;
-      }
-      button {
-        border-radius: 4px;
-        border: 1px solid rgb(187, 187, 187);
-      }
-      input {
-        margin-bottom: 0.5em;
-      }
-      input[type='text'],
-      input[type='button'],
-      input[type='number'],
-      input[type='submit'] {
-        display: block;
-        border-radius: 4px;
-        border: 1px solid rgb(187, 187, 187);
-      }
-      .form-group {
-        width: min(768px, 100%);
-      }
-      .form-group input {
-        width: 100%;
-      }
-      input[type='number'] {
-        width: 10ch;
-      }
-      .table {
-        outline: 1px solid grey;
-      }
-      .table .table-head {
-        font-weight: 600;
-      }
-      .table .row {
-        display: flex;
-      }
-      .table .row div {
-        box-sizing: border-box;
-        width: 100%;
-        outline: 0.5px solid grey;
-      }
-      .table .row:nth-child(2n-1) {
-        background-color: rgb(245, 245, 245);
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <form action="/api/backup" method="post" enctype="multipart/form-data">
-      <input type="file" name="file" id="file" accept=".xml" />
-      <input type="submit" value="Upload" />
-    </form>
-    <a href="/api/backup" download>
-      <button>Download</button>
-    </a>
-    <form action="/q/building/create" method="get">
-      <div class="form-group">
-        <label for="id">ID</label>
-        <input type="text" name="id" id="id" />
+    <section>
+      <h3>Backup</h3>
+      <form action="/api/backup" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" id="file" accept=".xml" />
+        <input type="submit" value="Upload" />
+      </form>
+    </section>
+    <section>
+      <a href="/api/backup" download>
+        <button>Download</button>
+      </a>
+    </section>
+    <section>
+      <h3>Create</h3>
+      <form action="/q/building/create" method="get">
+        <div class="form-group">
+          <label for="propertyType">Property type</label>
+          <input type="text" name="propertyType" id="propertyType" />
+        </div>
+        <div class="form-group">
+          <label for="street">Street</label>
+          <input type="text" name="street" id="street" />
+        </div>
+        <div class="form-group">
+          <label for="number">Number</label>
+          <input type="text" name="number" id="number" />
+        </div>
+        <div class="form-group">
+          <label for="commissioningDate">Commissioning date</label>
+          <input type="text" name="commissioningDate" id="commissioningDate" />
+        </div>
+        <div class="form-group">
+          <label for="storeysNumber">Storeys number</label>
+          <input
+            type="number"
+            name="storeysNumber"
+            id="storeysNumber"
+            min="1"
+            value="1"
+          />
+        </div>
+        <div class="form-group">
+          <label for="owner">Owner</label>
+          <input type="text" name="owner" id="owner" />
+        </div>
+        <input type="submit" value="submit" />
+      </form>
+    </section>
+    <section>
+      <div id="list" class="table">
+        <div class="table-head">
+          <div>ID</div>
+          <div>Property Type</div>
+          <div>Street</div>
+          <div>Number</div>
+          <div>Commissioning date</div>
+          <div>Storeys number</div>
+          <div>Owner</div>
+          <div></div>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="propertyType">Property type</label>
-        <input type="text" name="propertyType" id="propertyType" />
-      </div>
-      <div class="form-group">
-        <label for="street">Street</label>
-        <input type="text" name="street" id="street" />
-      </div>
-      <div class="form-group">
-        <label for="number">Number</label>
-        <input type="text" name="number" id="number" />
-      </div>
-      <div class="form-group">
-        <label for="commissioningDate">Commissioning date</label>
-        <input type="text" name="commissioningDate" id="commissioningDate" />
-      </div>
-      <div class="form-group">
-        <label for="storeysNumber">Storeys number</label>
-        <input
-          type="number"
-          name="storeysNumber"
-          id="storeysNumber"
-          min="1"
-          value="1"
-        />
-      </div>
-      <div class="form-group">
-        <label for="owner">Owner</label>
-        <input type="text" name="owner" id="owner" />
-      </div>
-      <input type="submit" value="submit" />
-    </form>
-    <div id="list" class="table">
-      <div class="table-head row">
-        <div>ID</div>
-        <div>Property Type</div>
-        <div>Street</div>
-        <div>Number</div>
-        <div>Commissioning date</div>
-        <div>Storeys number</div>
-        <div>Owner</div>
-      </div>
-    </div>
+    </section>
     <script>
       const list = document.querySelector('#list');
       const getBuildings = async () => {
@@ -115,7 +77,7 @@
         console.log(buildings);
         buildings.forEach((building) => {
           const row = document.createElement('div');
-          row.setAttribute('class', 'row');
+          row.setAttribute('class', 'table-row');
 
           const id = document.createElement('div');
           id.appendChild(document.createTextNode(building.id));
@@ -144,6 +106,17 @@
           const owner = document.createElement('div');
           owner.appendChild(document.createTextNode(building.owner));
 
+          const del = document.createElement('div');
+          const deleteButton = document.createElement('a');
+          deleteButton.setAttribute(
+            'href',
+            `/q/building/delete/${building.id}`
+          );
+          const button = document.createElement('button');
+          button.innerHTML = '❌';
+          deleteButton.appendChild(button);
+          del.appendChild(deleteButton);
+
           row.appendChild(id);
           row.appendChild(propertyType);
           row.appendChild(street);
@@ -151,6 +124,7 @@
           row.appendChild(commissioningDate);
           row.appendChild(storeysNumber);
           row.appendChild(owner);
+          row.appendChild(del);
 
           list.appendChild(row);
         });

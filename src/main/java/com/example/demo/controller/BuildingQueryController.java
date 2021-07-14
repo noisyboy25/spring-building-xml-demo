@@ -1,70 +1,55 @@
 package com.example.demo.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
+import com.example.demo.lib.XmlDatabase;
 import com.example.demo.model.Building;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 public class BuildingQueryController {
-  final File dbFile = new File("building.xml");
+  final XmlDatabase<Building> buildingDb = new XmlDatabase<>("building.xml", Building.class);
 
   @GetMapping(value = "/q/building/read/{id}", produces = "application/json")
   public Optional<Building> oneBuilding(@PathVariable String id) throws IOException {
-    var xmlMapper = new XmlMapper();
-
-    List<Building> dataBase;
-
-    dataBase = xmlMapper.readValue(dbFile, new TypeReference<List<Building>>() {
-    });
-
-    return dataBase.stream().filter(b -> b.getId().equals(id)).findFirst();
+    return buildingDb.findFirst(UUID.fromString(id));
   }
 
   @GetMapping(value = "/q/building/read", produces = "application/json")
   public List<Building> allBuildings() throws IOException {
-    var xmlMapper = new XmlMapper();
-
-    return xmlMapper.readValue(dbFile, new TypeReference<List<Building>>() {
-    });
+    return buildingDb.findAll();
   }
 
-  /* e.g. http://localhost:8080/q/building/create?id=10020202&propertyType=private&street=lol&number=11&commissioningDate=today&storeysNumber=5&owner=10 */
+  /*
+   * e.g.
+   * http://localhost:8080/q/building/create?id=10020202&propertyType=private&
+   * street=lol&number=11&commissioningDate=today&storeysNumber=5&owner=10
+   */
   @GetMapping(value = "/q/building/create", produces = "application/json")
-  public View addBuilding(Building newBuilding) throws IOException {
+  public void addBuilding(@Valid Building newBuilding, BindingResult bindingResult, HttpServletResponse response)
+      throws IOException {
 
-    var xmlMapper = new XmlMapper();
+    if (!bindingResult.hasErrors()) {
+      buildingDb.save(newBuilding);
+    }
 
-    List<Building> dataBase = xmlMapper.readValue(dbFile, new TypeReference<List<Building>>() {
-    });
-
-    dataBase.add(newBuilding);
-
-    xmlMapper.writeValue(dbFile, dataBase);
-
-    return new RedirectView("/");
+    response.sendRedirect("/");
   }
 
   @GetMapping(value = "/q/building/delete/{id}", produces = "application/json")
-  public void deleteBuilding(@PathVariable String id) throws IOException {
+  public void deleteBuilding(@PathVariable String id, HttpServletResponse response) throws IOException {
+    buildingDb.delete(UUID.fromString(id));
 
-    var xmlMapper = new XmlMapper();
-
-    List<Building> dataBase = xmlMapper.readValue(dbFile, new TypeReference<List<Building>>() {
-    });
-
-    dataBase.removeIf(b -> b.getId().equals(id));
-
-    xmlMapper.writeValue(dbFile, dataBase);
+    response.sendRedirect("/");
   }
 }
