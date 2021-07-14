@@ -12,6 +12,8 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 public class BuildingQueryController {
@@ -40,7 +42,7 @@ public class BuildingQueryController {
   // e.g.
   // http://localhost:8080/q/building/create?id=10020202&propertyType=private&street=lol&number=11&commissioningDate=today&storeysNumber=5&owner=10
   @GetMapping(value = "/q/building/create", produces = "application/json")
-  public Building addBuilding(Building newBuilding) throws IOException {
+  public View addBuilding(Building newBuilding) throws IOException {
 
     var xmlMapper = new XmlMapper();
 
@@ -51,7 +53,7 @@ public class BuildingQueryController {
 
     xmlMapper.writeValue(dbFile, dataBase);
 
-    return newBuilding;
+    return new RedirectView("/");
   }
 
   @GetMapping(value = "/q/building/delete/{id}", produces = "application/json")
