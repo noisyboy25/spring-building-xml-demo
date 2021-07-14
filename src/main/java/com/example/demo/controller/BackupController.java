@@ -15,17 +15,17 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
-@RestController
+@RestController()
 public class BackupController {
   final File dbFile = new File("building.xml");
 
-  @GetMapping("/backup")
+  @GetMapping("/api/backup")
   public void fileDownload(HttpServletResponse response) throws IOException {
     response.setContentType("application/xml");
     Files.copy(dbFile.toPath(), response.getOutputStream());
   }
 
-  @PostMapping("/backup")
+  @PostMapping("/api/backup")
   public View fileUpload(@RequestParam("file") MultipartFile file) throws IOException {
     Files.copy(file.getInputStream(), dbFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
     return new RedirectView("/");

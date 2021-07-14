@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BuildingController {
   final File dbFile = new File("building.xml");
 
-  @GetMapping(value = "/building/{id}", produces = "application/json")
+  @GetMapping(value = "/api/building/{id}", produces = "application/json")
   public Optional<Building> oneBuilding(@PathVariable String id) throws IOException {
     var xmlMapper = new XmlMapper();
 
@@ -32,7 +32,7 @@ public class BuildingController {
     return dataBase.stream().filter(b -> b.getId().equals(id)).findFirst();
   }
 
-  @GetMapping(value = "/building", produces = "application/json")
+  @GetMapping(value = "/api/building", produces = "application/json")
   public List<Building> allBuildings() throws IOException {
     var xmlMapper = new XmlMapper();
 
@@ -40,7 +40,7 @@ public class BuildingController {
     });
   }
 
-  @PostMapping(value = "/building", produces = "application/json")
+  @PostMapping(value = "/api/building", produces = "application/json")
   public Building addBuilding(@RequestBody Building newBuilding) throws IOException {
 
     var xmlMapper = new XmlMapper();
@@ -55,7 +55,7 @@ public class BuildingController {
     return newBuilding;
   }
 
-  @DeleteMapping(value = "/building/{id}", produces = "application/json")
+  @DeleteMapping(value = "/api/building/{id}", produces = "application/json")
   public void deleteBuilding(@PathVariable String id) throws IOException {
 
     var xmlMapper = new XmlMapper();
