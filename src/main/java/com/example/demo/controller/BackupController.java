@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.view.RedirectView;
 
 @RestController()
 public class BackupController {
@@ -26,8 +24,14 @@ public class BackupController {
   }
 
   @PostMapping("/api/backup")
-  public View fileUpload(@RequestParam("file") MultipartFile file) throws IOException {
+  public void fileUpload(@RequestParam("file") MultipartFile file, HttpServletResponse response) throws IOException {
+    if (file.isEmpty()) {
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Cannot save file");
+      return;
+    }
+
     Files.copy(file.getInputStream(), dbFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-    return new RedirectView("/");
+
+    response.sendRedirect("/");
   }
 }
