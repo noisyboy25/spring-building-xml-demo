@@ -31,8 +31,7 @@ public class BuildingQueryController {
   }
 
   /*
-   * e.g.
-   * http://localhost:8080/q/building/create?id=10020202&propertyType=private&
+   * e.g. http://localhost:8080/q/building/create?propertyType=private&
    * street=lol&number=11&commissioningDate=today&storeysNumber=5&owner=10
    */
   @GetMapping(value = "/q/building/create", produces = "application/json")
