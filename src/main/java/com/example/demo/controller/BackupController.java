@@ -25,7 +25,7 @@ public class BackupController {
 
   @PostMapping("/api/backup")
   public void fileUpload(@RequestParam("file") MultipartFile file, HttpServletResponse response) throws IOException {
-    if (!file.isEmpty()) {
+    if (!file.isEmpty() && "text/xml".equals(file.getContentType())) {
       Files.copy(file.getInputStream(), dbFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 
