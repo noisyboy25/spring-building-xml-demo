@@ -17,9 +17,9 @@
       <h3>About</h3>
       <div class="about-table">
         <div>First Name</div>
-        <div>Павел</div>
+        <div>Игорь</div>
         <div>Last Name</div>
-        <div>Беляев</div>
+        <div>Коробецкий</div>
         <div>Group</div>
         <div>УВА-211</div>
         <div>Records</div>
@@ -29,12 +29,12 @@
     <script>
       const records = document.querySelector('#records');
 
-      const getBatteries = async () => {
-        const batteries = await (await fetch('/api/battery')).json();
-        console.log(batteries);
-        if (batteries) records.innerHTML = batteries.length || '';
+      const getBuildings = async () => {
+        const buildings = await (await fetch('/api/building')).json();
+        console.log(buildings);
+        if (buildings) records.innerHTML = buildings.length;
       };
-      getBatteries();
+      getBuildings();
     </script>
   </body>
 </html>
